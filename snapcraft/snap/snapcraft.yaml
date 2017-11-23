@@ -1,0 +1,33 @@
+name: dbeaver # you probably want to 'snapcraft register <name>'
+version: '4.2.5' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Universal SQL Client 
+description: |
+  Free multi-platform database tool for developers, SQL programmers, database administrators and analysts. Supports all popular databases: MySQL, PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access, Teradata, Firebird, Derby, etc.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+  dbeaver:
+    command: desktop-launch ${SNAP}/dbeaver
+    desktop: dbeaver.desktop
+    plugs: [home, network] 
+
+parts:
+  java-jre:
+    plugin: jdk
+    source: .
+  dbeaver:
+    source: https://github.com/serge-rider/dbeaver/releases/download/4.2.5/dbeaver-ce-4.2.5-linux.gtk.x86_64.tar.gz
+    plugin: dump
+    after:
+      - desktop-gtk2    
+    build-packages:
+    - ca-certificates
+    - ca-certificates-java    
+    stage-packages: 
+      - libgdk-pixbuf2.0-dev
+      - libgdk-pixbuf2.0-0
+    install: |
+        chmod +x dbeaver     
+
